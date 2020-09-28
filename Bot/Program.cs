@@ -17,7 +17,7 @@ namespace Bot
         /// <summary>  
         /// Declare Telegrambot object  
         /// </summary>  
-        private static readonly TelegramBotClient bot = new TelegramBotClient("1346767934:AAGFSN0XKPEN3bd5EY5PgJvh5v9m9NsRU2c");
+        private static readonly TelegramBotClient bot = new TelegramBotClient("YOUR_API_ID");
 
         public static Respostas _respostas = new Respostas();
         public static BaseDados _basedados = new BaseDados();
