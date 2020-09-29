@@ -21,13 +21,13 @@ namespace Bot
 
         public static Respostas _respostas = new Respostas();
         public static BaseDados _basedados = new BaseDados();
+        public static Ipma _ipma = new Ipma();
 
         static void Main(string[] args)
         {
 
             bot.OnMessage += Csharpcornerbotmessage;
             bot.StartReceiving();
-            
             Console.ReadLine();
             bot.StopReceiving();
 
@@ -44,7 +44,19 @@ namespace Bot
                 PrepareQuestionnaires(e);
             else if (e.Message.Type == Telegram.Bot.Types.Enums.MessageType.Video)
                 PrepareQuestionnairesVideos(e);
+
         }
+
+
+        public static void PrepareQuestionnairesFotos(MessageEventArgs e)
+        {
+            DateTime myDateTime = DateTime.Now;
+            string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+
+
+        }
+
         public static void PrepareQuestionnairesVideos(MessageEventArgs e)
         {
                 DateTime myDateTime = DateTime.Now;
@@ -71,9 +83,34 @@ namespace Bot
             if (e.Message.Text.First().ToString() == "/")
             {
                 _respostas.Abuso(e);
-                
-                
             }
+
+            if (e.Message.Text.ToLower().Contains("temperatura"))
+            {
+                Ipma.DadosTemperatura3Dias[] _temperaturas = new Ipma.DadosTemperatura3Dias[5];
+                Ipma.DadosIdentificador[] _identificador = new Ipma.DadosIdentificador[30];
+
+                string localidade = e.Message.Text.ToLower().Substring(11, e.Message.Text.ToLower().Length-11);
+                localidade = localidade.Replace(" ", "");
+                string resposta = "";
+
+                _identificador = _ipma.GetDistritos();
+
+                _temperaturas = _ipma.GetTemperatura(localidade, _identificador);
+
+                resposta += "<b><i>" + localidade + "</i></b>" + ":" + Environment.NewLine;
+
+                for (int i = 0; i < _temperaturas.Length; i++)
+                {
+                    resposta += _temperaturas[i].forecastDate + ":" + Environment.NewLine;
+                    resposta += "**Probabilidade de chuva:** " + _temperaturas[i].precipitaProb + "%" + Environment.NewLine;
+                    resposta += "**Max:** " + _temperaturas[i].tMax + "**Min:** " + _temperaturas[i].tMin + Environment.NewLine;
+                }
+                
+                _respostas.Temperatura(e , resposta);
+
+            }
+
 
             if (e.Message.Text.ToLower() == "noticias")
             {
@@ -116,7 +153,7 @@ namespace Bot
                  DateTime myDateTime = DateTime.Now;
                  string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-                _basedados.Inserir("INSERT INTO chat (idUser, conversa, data) VALUES ('" + e.Message.Chat.Id.ToString() + "','" + e.Message.Text + "','" + sqlFormattedDate + "')");
+                _basedados.Inserir("INSERT INTO chat (idUser, conversa, data,user) VALUES ('" + e.Message.Chat.Id.ToString() + "','" + e.Message.Text + "','" + sqlFormattedDate + "','" + e.Message.From +"')");
                 System.Console.WriteLine(e.Message.Chat.Id.ToString());
                 System.Console.WriteLine(e.Message.Text);
 }

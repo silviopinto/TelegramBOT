@@ -29,7 +29,6 @@ namespace Bot
              chatId: e.Message.Chat,
              text: _get.GetHoras());
 
-            
         }
 
         public async void Ola(MessageEventArgs e)
@@ -45,7 +44,19 @@ namespace Bot
 $"and has {message.Entities.Length} message entities.");
         }
 
-        public async void Abuso(MessageEventArgs e)
+        public async void Temperatura(MessageEventArgs e, string resposta)
+        {
+            Message message = await bot.SendTextMessageAsync(
+            chatId: e.Message.Chat,
+            text: resposta,
+            parseMode: ParseMode.Markdown,
+            disableNotification: true,
+
+            replyToMessageId: e.Message.MessageId);
+
+        }
+
+            public async void Abuso(MessageEventArgs e)
         {
             Message message = await bot.SendTextMessageAsync(
             chatId: e.Message.Chat,
