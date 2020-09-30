@@ -5,19 +5,19 @@
  (Em desenvolvimento)
  
  # Bibliotecas:
- Microsoft.ToolKit
- MySql.Data
- Newtonsoft.Json
- System.Net.Http
+- Microsoft.ToolKit
+- MySql.Data
+- Newtonsoft.Json
+- System.Net.Http
  
  # Configurações:
- 1- Abrir o telegram e abrir uma conversa com @BotFather
- 2- Criar um novo bot
- 3- Convidar o bot para um grupo à escolha.
- 4- Copiar o token to access the HTTP API
- 5- Colar no Program.cs em : private static readonly TelegramBotClient bot = new TelegramBotClient("TOKEN API AQUI");
- 6- Alterar a string de ligação à base de dados em BaseDados.cs : string cs = @"server=localhost;userid=root;password=123456;database=bot";
- 7- Correr o script para criar a base de dados.
+ - 1- Abrir o telegram e abrir uma conversa com @BotFather
+ - 2- Criar um novo bot
+ - 3- Convidar o bot para um grupo à escolha.
+ - 4- Copiar o token to access the HTTP API
+ - 5- Colar no Program.cs em : private static readonly TelegramBotClient bot = new TelegramBotClient("TOKEN API AQUI");
+ - 6- Alterar a string de ligação à base de dados em BaseDados.cs : string cs = @"server=localhost;userid=root;password=123456;database=bot";
+ - 7- Correr o script para criar a base de dados.
  
  
  # Funcionalidades:
@@ -34,13 +34,13 @@
  # Comandos:
  (exemplo de comando Temperatura Lisboa)
  
- Temperatura "localidade" 
- Admins
- Noticias
- Euromilhoes
- Horas
- Melhor grupo
- Mensagens
+ - Temperatura "localidade" 
+ - Admins
+ - Noticias
+ - Euromilhoes
+ - Horas
+ - Melhor grupo
+ - Mensagens
  
  
  
