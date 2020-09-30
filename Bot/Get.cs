@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// ********************************************************************
+// ********************************************************************
+// **********  https://github.com/silviopinto/TelegramBOT  ************
+// ********************************************************************
+// ********************************************************************
+
 using Microsoft.Toolkit.Parsers.Rss;
+using System;
+using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Bot
 {
@@ -12,14 +16,13 @@ namespace Bot
     {
         public static Respostas _resposta = new Respostas();
 
-        //public string[] urlNoticias = null;
         string url = "http://feeds.jn.pt/JN-Ultimas";
 
 
         public void GetMeteo()
         {
-           
-     
+
+
         }
 
         public string GetHoras()
@@ -87,7 +90,7 @@ namespace Bot
                         {
                             _noticias[element.i].Noticia = element.value.Content.Substring(0, index);
                         }
-                        
+
                         contador++;
                     }
                 }

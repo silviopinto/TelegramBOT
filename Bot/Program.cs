@@ -17,7 +17,7 @@ namespace Bot
         /// <summary>  
         /// Declare Telegrambot object  
         /// </summary>  
-        private static readonly TelegramBotClient bot = new TelegramBotClient("YOUR_API_ID");
+        private static readonly TelegramBotClient bot = new TelegramBotClient("1346767934:AAGFSN0XKPEN3bd5EY5PgJvh5v9m9NsRU2c");
 
         public static Respostas _respostas = new Respostas();
         public static BaseDados _basedados = new BaseDados();
@@ -25,12 +25,10 @@ namespace Bot
 
         static void Main(string[] args)
         {
-
             bot.OnMessage += Csharpcornerbotmessage;
             bot.StartReceiving();
             Console.ReadLine();
             bot.StopReceiving();
-
         }
 
         /// <summary>  
@@ -47,31 +45,31 @@ namespace Bot
 
         }
 
-
         public static void PrepareQuestionnairesFotos(MessageEventArgs e)
         {
             DateTime myDateTime = DateTime.Now;
-            string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
-
-
+            string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
         }
 
         public static void PrepareQuestionnairesVideos(MessageEventArgs e)
         {
                 DateTime myDateTime = DateTime.Now;
-                string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
-                string resultado = _basedados.Verificar("select hashCode from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
+                string data = _basedados.Verificar("select hashCode from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
 
-                if (resultado == null)
+            if (data == null)
                 {
-                    _basedados.Inserir("insert into videos (hashCode, data) values ('" + e.Message.Video.FileUniqueId + "','" + sqlFormattedDate + "')");
-                }
+                    _basedados.Inserir("insert into videos (hashCode, data,user) values ('" + e.Message.Video.FileUniqueId + "','" + sqlFormattedDate + "','" + e.Message.From + "')");
+                    System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.From + " enviou um video. ");
+                 }
                 else
                 {
-                resultado = _basedados.Verificar("select data from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
-                  _respostas.Spam(e, resultado);
+                data = _basedados.Verificar("select data from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
+                string user = _basedados.Verificar("select user from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
+                System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.From + " enviou um video que já existe. ");
+                _respostas.Spam(e, data,user);
             }
 
             
@@ -87,6 +85,7 @@ namespace Bot
 
             if (e.Message.Text.ToLower().Contains("temperatura"))
             {
+                
                 Ipma.DadosTemperatura3Dias[] _temperaturas = new Ipma.DadosTemperatura3Dias[5];
                 Ipma.DadosIdentificador[] _identificador = new Ipma.DadosIdentificador[30];
 
@@ -111,6 +110,11 @@ namespace Bot
 
             }
 
+            if (e.Message.Text.ToLower() == "quantas mensagens")
+            {
+                System.Console.WriteLine(e.Message.Chat.Id);
+                _respostas.Noticias(e);
+            }
 
             if (e.Message.Text.ToLower() == "noticias")
             {
@@ -128,34 +132,23 @@ namespace Bot
             
             }
 
+            if (e.Message.Text.ToLower() == "admins")
+            {
+                _respostas.Admins(e);
+            }
+
             if (e.Message.Text.ToLower().Contains("melhor grupo"))
                 bot.SendTextMessageAsync(e.Message.Chat.Id, "Pussylga com certeza!");
             
-            if (e.Message.Text.ToLower().Contains("csharpcorner logo?"))
-            {
-                bot.SendStickerAsync(e.Message.Chat.Id, "https://csharpcorner-mindcrackerinc.netdna-ssl.com/App_Themes/CSharp/Images/SiteLogo.png");
-                bot.SendTextMessageAsync(e.Message.Chat.Id, "Anything else?");
-            }
-            if (e.Message.Text.ToLower().Contains("list of featured"))
-                bot.SendTextMessageAsync(e.Message.Chat.Id, "Give me your profile link ?");
-            if (e.Message.Text.ToLower().Contains("here it is"))
-                bot.SendTextMessageAsync(e.Message.Chat.Id, Environment.NewLine + "https://www.c-sharpcorner.com/article/getting-started-with-ionic-framework-angular-and-net-core-3/" + Environment.NewLine + Environment.NewLine +
-                    "https://www.c-sharpcorner.com/article/getting-started-with-ember-js-and-net-core-3/" + Environment.NewLine + Environment.NewLine +
-                    "https://www.c-sharpcorner.com/article/getting-started-with-vue-js-and-net-core-32/");
-
-
-            
-
-         
 
             if (e.Message.Text.ToString() != null)
 {
                  DateTime myDateTime = DateTime.Now;
-                 string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                 string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
                 _basedados.Inserir("INSERT INTO chat (idUser, conversa, data,user) VALUES ('" + e.Message.Chat.Id.ToString() + "','" + e.Message.Text + "','" + sqlFormattedDate + "','" + e.Message.From +"')");
-                System.Console.WriteLine(e.Message.Chat.Id.ToString());
-                System.Console.WriteLine(e.Message.Text);
+                System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.From +" enviou: " + e.Message.Text);
+               
 }
 
 
