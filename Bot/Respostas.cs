@@ -32,7 +32,6 @@ namespace Bot
             message = await bot.SendTextMessageAsync(
              chatId: e.Message.Chat,
              text: _get.GetHoras());
-
         }
 
         public async void Ola(MessageEventArgs e)
@@ -62,16 +61,28 @@ $"and has {message.Entities.Length} message entities.");
 
         public async void Abuso(MessageEventArgs e)
         {
-            Message message = await bot.SendTextMessageAsync(
-            chatId: e.Message.Chat,
-            text: "Abusos *na pussylga* não serão tolerados, como consequencia poderás ser `banido` do grupo",
-            parseMode: ParseMode.Markdown,
-            disableNotification: true,
-            replyToMessageId: e.Message.MessageId,
-            replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Clica aqui para seres uma pessoa melhor", "https://pornhub.com")));
-            Console.WriteLine($"{message.From.FirstName} enviou mensagem {message.Text.ToLower()} " + $"para o chat {message.Chat.Title} às {message.Date}. " + $"Mensagem: {message.ReplyToMessage.MessageId} " +
-$"and has {message.Entities.Length} message entities.");
+            try {
+                Message message = await bot.SendTextMessageAsync(
+           chatId: e.Message.Chat,
+           text: "Abusos *na pussylga* não serão tolerados, como consequencia poderás ser `banido` do grupo",
+           parseMode: ParseMode.Markdown,
+           disableNotification: true,
+           replyToMessageId: e.Message.MessageId,
+           replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Clica aqui para seres uma pessoa melhor", "https://pornhub.com")));
+                Console.WriteLine($"{message.From.FirstName} enviou mensagem {message.Text.ToLower()} " + $"para o chat {message.Chat.Title} às {message.Date}. " + $"Mensagem: {message.ReplyToMessage.MessageId} " +
+    $"and has {message.Entities.Length} message entities.");
+            }
+            catch (Telegram.Bot.Exceptions.ApiRequestException msg )
+            {
+                
+                Console.WriteLine(e.Message.From + "  Bloqueou o BOT -- " +msg);
+                Message message = await bot.SendTextMessageAsync(
+                 chatId: e.Message.Chat,
+            text: "Olá "+ e.Message.From + " obrigado por me teres *bloqueado*, como consequencia poderás ser `banido` do grupo até porque meteste um video repetido");
+            }
         }
+            
+        
 
         public async void Admins(MessageEventArgs e)
             {

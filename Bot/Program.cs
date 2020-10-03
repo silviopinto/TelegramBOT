@@ -52,12 +52,12 @@ namespace Bot
 
         }
 
-        public static void PrepareQuestionnairesVideos(MessageEventArgs e)
+        public async static void PrepareQuestionnairesVideos(MessageEventArgs e)
         {
                 DateTime myDateTime = DateTime.Now;
                 string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
-                string data = _basedados.Verificar("select hashCode from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
+                string data = await _basedados.Verificar("select hashCode from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
 
             if (data == null)
                 {
@@ -66,8 +66,8 @@ namespace Bot
                  }
                 else
                 {
-                data = _basedados.Verificar("select data from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
-                string user = _basedados.Verificar("select user from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
+                data = await _basedados.Verificar("select data from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
+                string user = await _basedados.Verificar("select user from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
                 System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.From + " enviou um video que já existe. ");
                 _respostas.Spam(e, data,user);
             }
@@ -85,7 +85,7 @@ namespace Bot
 
             if (e.Message.Text.ToLower().Contains("temperatura"))
             {
-                
+                try { 
                 Ipma.DadosTemperatura3Dias[] _temperaturas = new Ipma.DadosTemperatura3Dias[5];
                 Ipma.DadosIdentificador[] _identificador = new Ipma.DadosIdentificador[30];
 
@@ -107,7 +107,9 @@ namespace Bot
                 }
                 
                 _respostas.Temperatura(e , resposta);
-
+                }
+                catch (Exception)
+                { }
             }
 
             if (e.Message.Text.ToLower() == "quantas mensagens")

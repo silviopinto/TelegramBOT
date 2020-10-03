@@ -80,7 +80,7 @@ namespace Bot
                 {
                     json_data = w.DownloadString("https://api.ipma.pt/open-data/distrits-islands.json");
                 }
-                catch (Exception e)
+                catch (Exception)
                 { }
 
                 var result = JsonConvert.DeserializeObject<RootObject>(json_data);
@@ -169,7 +169,7 @@ namespace Bot
                     json_data = w.DownloadString("http://api.ipma.pt/open-data/forecast/meteorology/cities/daily/" + globalIdLocal + ".json");
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     System.Console.WriteLine("Ocorreu um erro a tentar obter o JSON do IPMA");
                 }
@@ -234,13 +234,12 @@ namespace Bot
                         _objectoTemperaturas[element.i].latitude = element.value;
                     }
                 }
-                catch (NullReferenceException e)
+                catch (NullReferenceException)
                 {
                     System.Console.WriteLine("Ocorreu um erro #15");
                 }
                 }
             
-                
 
             return _objectoTemperaturas;
         }
