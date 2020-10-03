@@ -68,7 +68,7 @@ $"and has {message.Entities.Length} message entities.");
            parseMode: ParseMode.Markdown,
            disableNotification: true,
            replyToMessageId: e.Message.MessageId,
-           replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Clica aqui para seres uma pessoa melhor", "https://pornhub.com")));
+           replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Clica aqui para seres uma pessoa melhor", "https://www.decorfacil.com/como-fazer-croche/")));
                 Console.WriteLine($"{message.From.FirstName} enviou mensagem {message.Text.ToLower()} " + $"para o chat {message.Chat.Title} às {message.Date}. " + $"Mensagem: {message.ReplyToMessage.MessageId} " +
     $"and has {message.Entities.Length} message entities.");
             }
@@ -82,7 +82,6 @@ $"and has {message.Entities.Length} message entities.");
             }
         }
             
-        
 
         public async void Admins(MessageEventArgs e)
             {
@@ -95,12 +94,6 @@ $"and has {message.Entities.Length} message entities.");
 
             }
 
-       
-
-
-
-
-
 
         public async void Spam(MessageEventArgs e, string data, string user)
         {
@@ -111,7 +104,7 @@ $"and has {message.Entities.Length} message entities.");
             parseMode: ParseMode.Markdown,
             disableNotification: true,
             replyToMessageId: e.Message.MessageId,
-            replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Clica aqui para seres uma pessoa melhor", "https://pornhub.com")));
+            replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Clica aqui para seres uma pessoa melhor", "https://www.decorfacil.com/como-fazer-croche/")));
         }
 
         public async void EuroMilhoes(MessageEventArgs e)
