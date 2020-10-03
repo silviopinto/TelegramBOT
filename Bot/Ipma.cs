@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Net;
-using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 
 
 namespace Bot
@@ -150,7 +146,7 @@ namespace Bot
 
             string globalIdLocal = "";
 
-            for (int i = 0; i < objectoDistritos.Length-1; i++)
+            for (int i = 0; i < objectoDistritos.Length - 1; i++)
             {
                 if (local == objectoDistritos[i].local || local == objectoDistritos[i].local.ToLower())
                 {
@@ -204,10 +200,6 @@ namespace Bot
                     {
                         _objectoTemperaturas[element.i].tMax = element.value;
                     }
-                    foreach (var element in tMin.Select((value, i) => new { i, value }))
-                    {
-                        _objectoTemperaturas[element.i].tMin = element.value;
-                    }
 
                     foreach (var element in predWindDir.Select((value, i) => new { i, value }))
                     {
@@ -236,10 +228,10 @@ namespace Bot
                 }
                 catch (NullReferenceException)
                 {
-                    System.Console.WriteLine("Ocorreu um erro #15");
+                    System.Console.WriteLine("Ocorreu um erro a carregar o JSON");
                 }
-                }
-            
+            }
+
 
             return _objectoTemperaturas;
         }

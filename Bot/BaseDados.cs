@@ -1,7 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.Threading.Tasks;
 
 namespace Bot
@@ -22,7 +20,7 @@ namespace Bot
 
                 var cmd = new MySqlCommand(query, con);
 
-                var result =  await cmd.ExecuteNonQueryAsync();
+                var result = await cmd.ExecuteNonQueryAsync();
 
                 Console.WriteLine("Novo registo feito na base de dados");
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bot
+﻿namespace Bot
 {
     public class Noticias
     {
@@ -15,7 +9,7 @@ namespace Bot
         public string Link { get; set; }
 
 
-        public Noticias(string titulo,string noticia,System.DateTime data, string link)
+        public Noticias(string titulo, string noticia, System.DateTime data, string link)
         {
             Titulo = titulo;
             Noticia = noticia;
