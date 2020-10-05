@@ -1,11 +1,20 @@
-﻿using System;
+﻿
+// ********************************************************************
+// ********************************************************************
+// **********  https://github.com/silviopinto/TelegramBOT  ************
+// ********************************************************************
+// ********************************************************************
+
+
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 
 namespace Bot
 {
-    class Program
+    public class Program
     {
         /// <summary>  
         /// Declare Telegrambot object  
@@ -15,6 +24,8 @@ namespace Bot
         public static Respostas _respostas = new Respostas();
         public static BaseDados _basedados = new BaseDados();
         public static Ipma _ipma = new Ipma();
+        public static Auxiliares _auxiliares = new Auxiliares();
+        public static Get _get = new Get();
 
         static void Main(string[] args)
         {
@@ -29,24 +40,84 @@ namespace Bot
         /// </summary>  
         /// <param name="sender"></param>  
         /// <param name="e"></param>  
+ 
         private static void Csharpcornerbotmessage(object sender, MessageEventArgs e)
         {
+
             if (e.Message.Type == Telegram.Bot.Types.Enums.MessageType.Text)
                 PrepareQuestionnaires(e);
             else if (e.Message.Type == Telegram.Bot.Types.Enums.MessageType.Video)
                 PrepareQuestionnairesVideos(e);
+            else if (e.Message.Type == Telegram.Bot.Types.Enums.MessageType.ChatMembersAdded)
+                PrepararNovoMembro(e);
+            else if (e.Message.Type == Telegram.Bot.Types.Enums.MessageType.ChatMemberLeft)
+                PrepararSaidaMembro(e);
+            else if (e.Message.Type == Telegram.Bot.Types.Enums.MessageType.Photo)
+                PrepararFotos(e);
+            
 
         }
 
-        public static void PrepareQuestionnairesFotos(MessageEventArgs e)
+        public static void PrepararFotos(MessageEventArgs e)
+        {
+
+            DateTime myDateTime = DateTime.Now;
+            string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+
+        }
+
+
+        public async static void PrepararSaidaMembro(MessageEventArgs e)
         {
             DateTime myDateTime = DateTime.Now;
             string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
+            string data = await _basedados.Verificar("select nome from membros where nome ='" + e.Message.LeftChatMember + "'");
+
+            if (data == null)
+            {
+                _basedados.Inserir("insert into membros (nome, dataEntrada, dataSaida) values ('" + e.Message.LeftChatMember + "','" + sqlFormattedDate + "','" + sqlFormattedDate + "')");
+                System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.LeftChatMember + " saiu do grupo. ");
+                _respostas.Adeus(e);
+            }
+            else
+            {
+                _basedados.Inserir("update membros set dataSaida = '" + sqlFormattedDate + "' where nome = '" + e.Message.LeftChatMember + "')");
+                System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.LeftChatMember + " saiu do grupo. ");
+                _respostas.Adeus(e);
+            }
+
         }
+
+        public async static void PrepararNovoMembro(MessageEventArgs e)
+        {
+            DateTime myDateTime = DateTime.Now;
+            string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+            string data = await _basedados.Verificar("select nome from membros where nome ='" + e.Message.NewChatMembers[0].ToString() +"'");
+
+            // e.Message.NewChatMembers[0].FirstName.ToString() + " " + e.Message.NewChatMembers[0].LastName.ToString() + " (" + e.Message.NewChatMembers[0].
+
+            if (data == null)
+            {
+                _basedados.Inserir("insert into membros (nome, dataEntrada) values ('" + e.Message.NewChatMembers[0].ToString() + "','" + sqlFormattedDate +"')");
+                System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.NewChatMembers[0].ToString() + " entrou no grupo. ");
+                _respostas.BemVindo(e);
+            }
+            else
+            {
+                _basedados.Inserir("insert into membros (nome, dataEntrada) values ('" + e.Message.NewChatMembers[0].ToString() + "','" + sqlFormattedDate + "')");
+                System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.NewChatMembers[0].ToString() + " reentrou no grupo. ");
+                _respostas.BemVindo(e);
+            }
+
+        }
+
 
         public async static void PrepareQuestionnairesVideos(MessageEventArgs e)
         {
+
             DateTime myDateTime = DateTime.Now;
             string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
@@ -59,16 +130,19 @@ namespace Bot
             }
             else
             {
+                
                 data = await _basedados.Verificar("select data from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
                 string user = await _basedados.Verificar("select user from videos where hashCode='" + e.Message.Video.FileUniqueId + "'");
-                System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.From + " enviou um video que já existe. ");
                 _respostas.Spam(e, data, user);
+                System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.From + " enviou um video que já existe. ");
+                _basedados.Inserir("insert into avisos (nome,tipoAviso,data) values ('"+ e.Message.From + "','Video Repetido','" + sqlFormattedDate+ "')");
+                await bot.DeleteMessageAsync(e.Message.Chat.Id, e.Message.MessageId);
+                System.Console.WriteLine("A Mensagem foi apagada");
             }
-
 
         }
 
-        public static void PrepareQuestionnaires(MessageEventArgs e)
+        public async static void PrepareQuestionnaires(MessageEventArgs e)
         {
 
             if (e.Message.Text.First().ToString() == "/")
@@ -76,14 +150,15 @@ namespace Bot
                 _respostas.Abuso(e);
             }
 
-            if (e.Message.Text.ToLower().Contains("temperatura"))
+
+            if (e.Message.Text.ToLower().Contains("!temperatura"))
             {
                 try
                 {
                     Ipma.DadosTemperatura3Dias[] _temperaturas = new Ipma.DadosTemperatura3Dias[5];
                     Ipma.DadosIdentificador[] _identificador = new Ipma.DadosIdentificador[30];
 
-                    string localidade = e.Message.Text.ToLower().Substring(11, e.Message.Text.ToLower().Length - 11);
+                    string localidade = e.Message.Text.ToLower().Substring(12, e.Message.Text.ToLower().Length - 12);
                     localidade = localidade.Replace(" ", "");
                     string resposta = "";
 
@@ -106,36 +181,43 @@ namespace Bot
                 { }
             }
 
-            if (e.Message.Text.ToLower() == "quantas mensagens")
+            if (e.Message.Text.ToLower() == "!mensagens")
+            {
+                string resposta = await _get.getMensagens(e);
+
+                System.Console.WriteLine(e.Message.From.FirstName +" " + e.Message.From.LastName +" solicitou o numero de mensagens, o resultado foi: " + resposta);
+                _respostas.Mensagens(e, resposta);
+            }
+
+            if (e.Message.Text.ToLower() == "!noticias")
             {
                 System.Console.WriteLine(e.Message.Chat.Id);
                 _respostas.Noticias(e);
             }
 
-            if (e.Message.Text.ToLower() == "noticias")
-            {
-                System.Console.WriteLine(e.Message.Chat.Id);
-                _respostas.Noticias(e);
-            }
-
-            if (e.Message.Text.ToLower() == "horas")
+            if (e.Message.Text.ToLower() == "!horas")
             {
                 _respostas.Horas(e);
             }
 
-            if (e.Message.Text.ToLower() == "euromilhoes")
+            if (e.Message.Text.ToLower() == "!euromilhoes")
             {
                 _respostas.EuroMilhoes(e);
-
             }
 
-            if (e.Message.Text.ToLower() == "admins")
+            if (e.Message.Text.ToLower() == "!admins")
             {
                 _respostas.Admins(e);
             }
 
+            if (e.Message.Text.ToLower() == "!comandos")
+            {
+                _respostas.Comandos(e);
+                System.Console.WriteLine("O User " + e.Message.From.FirstName + " " + e.Message.From.LastName + " solicitou a lista de comandos.");
+            }
+
             if (e.Message.Text.ToLower().Contains("melhor grupo"))
-                bot.SendTextMessageAsync(e.Message.Chat.Id, "Pussylga com certeza!");
+                await bot.SendTextMessageAsync(e.Message.Chat.Id, "Pussylga com certeza!");
 
 
             if (e.Message.Text.ToString() != null)

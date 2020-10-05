@@ -103,6 +103,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auxiliares.cs" />
     <Compile Include="BaseDados.cs" />
     <Compile Include="Get.cs" />
     <Compile Include="Ipma.cs" />

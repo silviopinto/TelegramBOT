@@ -9,12 +9,14 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Telegram.Bot.Args;
 
 namespace Bot
 {
     public class Get
     {
         public static Respostas _resposta = new Respostas();
+        public static BaseDados _basedados = new BaseDados();
 
         string url = "http://feeds.jn.pt/JN-Ultimas";
 
@@ -23,6 +25,14 @@ namespace Bot
         {
 
 
+        }
+
+        public async Task<string> getMensagens(MessageEventArgs e)
+        {
+
+            string resposta = await _basedados.Verificar("SELECT COUNT(user) AS contador FROM chat WHERE USER = '" + e.Message.From + "'");
+
+            return resposta;
         }
 
         public string GetHoras()

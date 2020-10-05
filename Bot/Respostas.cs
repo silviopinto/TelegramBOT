@@ -34,17 +34,15 @@ namespace Bot
              text: _get.GetHoras());
         }
 
-        public async void Ola(MessageEventArgs e)
+
+        public async void Mensagens(MessageEventArgs e, string mensagens)
         {
             Message message = await bot.SendTextMessageAsync(
             chatId: e.Message.Chat,
-            text: "Abusos *na pussylga* não serão tolerados, como consequencia poderás ser `banido` do grupo",
+            text: "Olá " +e.Message.From.FirstName + " " + e.Message.From.LastName + " desde que existo, já enviaste " + mensagens +" mensagens",
             parseMode: ParseMode.Markdown,
             disableNotification: true,
-            replyToMessageId: e.Message.MessageId,
-            replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Clica aqui para seres uma pessoa melhor", "https://pornhub.com")));
-            Console.WriteLine($"{message.From.FirstName} enviou mensagem {message.MessageId} " + $"para o chat {message.Chat.Id} às {message.Date}. " + $"Mensagem: {message.ReplyToMessage.MessageId} " +
-$"and has {message.Entities.Length} message entities.");
+            replyToMessageId: e.Message.MessageId);
         }
 
         public async void Temperatura(MessageEventArgs e, string resposta)
@@ -54,9 +52,48 @@ $"and has {message.Entities.Length} message entities.");
             text: resposta,
             parseMode: ParseMode.Markdown,
             disableNotification: true,
-
             replyToMessageId: e.Message.MessageId);
+        }
 
+        public async void BemVindo(MessageEventArgs e)
+        {
+            Message message = await bot.SendTextMessageAsync(
+            chatId: e.Message.Chat,
+            text: "Olá " + e.Message.NewChatMembers[0].FirstName + " " + e.Message.NewChatMembers[0].LastName + " sê bem vindo ao grupo!" +Environment.NewLine + "Se precisares da minha ajuda envia !comandos",
+            parseMode: ParseMode.Markdown,
+            disableNotification: true);
+        }
+
+        public async void Comandos(MessageEventArgs e)
+        {
+            Message message = await bot.SendTextMessageAsync(
+            chatId: e.Message.From.Id,
+            text: "Olá " + e.Message.From.FirstName + " " + e.Message.From.LastName +", os meus comandos são:"
+            + Environment.NewLine +
+            "*!admins* - Lista de admins"
+            + Environment.NewLine +
+            "*!euromilhoes* - Chave de euromilhões"
+             + Environment.NewLine +
+            "*!mensagens* - Quantidade de mensagens enviadas"
+             + Environment.NewLine +
+            "*!temperatura (distrito)* - Previsão para 5 dias"
+             + Environment.NewLine +
+            "*!noticias* - 5 ultimas noticias do JN"
+             + Environment.NewLine +
+            "*!horas* - Hora atual "
+             + Environment.NewLine +
+            "Mais tarde terei novos comandos",
+            parseMode: ParseMode.Markdown,
+            disableNotification: true);
+        }
+
+        public async void Adeus(MessageEventArgs e)
+        {
+            Message message = await bot.SendTextMessageAsync(
+            chatId: e.Message.Chat,
+            text: "O " + e.Message.LeftChatMember.FirstName + " " + e.Message.LeftChatMember.LastName + " saiu do grupo porque viu a mulher num video",
+            parseMode: ParseMode.Markdown,
+            disableNotification: true);
         }
 
         public async void Abuso(MessageEventArgs e)
@@ -74,36 +111,29 @@ $"and has {message.Entities.Length} message entities.");
             }
             catch (Telegram.Bot.Exceptions.ApiRequestException msg )
             {
-                
-                Console.WriteLine(e.Message.From + "  Bloqueou o BOT -- " +msg);
-                Message message = await bot.SendTextMessageAsync(
-                 chatId: e.Message.Chat,
-            text: "Olá "+ e.Message.From + " obrigado por me teres *bloqueado*, como consequencia poderás ser `banido` do grupo até porque meteste um video repetido");
+                Console.WriteLine(e.Message.From + "  Bloqueou o BOT e não conseguiu ser notificado ");
             }
         }
             
-
         public async void Admins(MessageEventArgs e)
             {
                 Message message = await bot.SendTextMessageAsync(
                 chatId: e.Message.Chat,
-                text: "Miguel" + Environment.NewLine + "Marco" + Environment.NewLine + "Sílvio" + Environment.NewLine + "2 Sarg 45º" + Environment.NewLine + "Migas" + Environment.NewLine + "Azevedo" + Environment.NewLine + "João Pincel" + Environment.NewLine + "1 Cabo" + Environment.NewLine + "Guerreiro" + Environment.NewLine + "J.Castanheiro",
+                text: "Miguel" + Environment.NewLine + "Marco" + Environment.NewLine + "Sílvio" + Environment.NewLine + "2 Sarg 45º" + Environment.NewLine + "Migas" + Environment.NewLine + "Azevedo" + Environment.NewLine + "João Pincel" + Environment.NewLine + "1 Cabo" + Environment.NewLine + "Guerreiro" + Environment.NewLine + "J.Castanheiro" + Environment.NewLine + "Maluma",
                 parseMode: ParseMode.Markdown,
                 disableNotification: true,
                 replyToMessageId: e.Message.MessageId);
-
             }
-
 
         public async void Spam(MessageEventArgs e, string data, string user)
         {
 
             Message message = await bot.SendTextMessageAsync(
             chatId: e.Message.Chat,
-            text: "O video que tentaste enviar já foi enviado para o grupo em: " + data + " pelo utilizador " + user,
+            text: "Olá " + e.Message.From.FirstName +" "+ e.Message.From.LastName +" o video que tentaste enviar já foi enviado para o grupo em: " + data + " pelo utilizador " + user + " como tal, será apagado",
             parseMode: ParseMode.Markdown,
             disableNotification: true,
-            replyToMessageId: e.Message.MessageId,
+            //replyToMessageId: e.Message.MessageId,
             replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithUrl("Clica aqui para seres uma pessoa melhor", "https://www.decorfacil.com/como-fazer-croche/")));
         }
 
@@ -148,7 +178,6 @@ $"and has {message.Entities.Length} message entities.");
                 System.Console.WriteLine(msg);
             }
         }
-
 
         public async void Noticias(MessageEventArgs e)
         {

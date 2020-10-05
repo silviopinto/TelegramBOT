@@ -75,8 +75,8 @@ C:\Users\Silviox\source\repos\TelegramBOT\Bot\bin\Debug\System.Memory.xml
 C:\Users\Silviox\source\repos\TelegramBOT\Bot\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\Silviox\source\repos\TelegramBOT\Bot\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\Silviox\source\repos\TelegramBOT\Bot\bin\Debug\Telegram.Bot.xml
-C:\Users\Silviox\source\repos\TelegramBOT\Bot\obj\Debug\Bot.csprojAssemblyReference.cache
 C:\Users\Silviox\source\repos\TelegramBOT\Bot\obj\Debug\Bot.csproj.CoreCompileInputs.cache
 C:\Users\Silviox\source\repos\TelegramBOT\Bot\obj\Debug\Bot.csproj.CopyComplete
 C:\Users\Silviox\source\repos\TelegramBOT\Bot\obj\Debug\Bot.exe
 C:\Users\Silviox\source\repos\TelegramBOT\Bot\obj\Debug\Bot.pdb
+C:\Users\Silviox\source\repos\TelegramBOT\Bot\obj\Debug\Bot.csprojAssemblyReference.cache

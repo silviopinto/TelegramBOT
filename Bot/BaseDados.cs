@@ -22,13 +22,13 @@ namespace Bot
 
                 var result = await cmd.ExecuteNonQueryAsync();
 
-                Console.WriteLine("Novo registo feito na base de dados");
+                //Console.WriteLine("Novo registo feito na base de dados");
 
                 con.Close();
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e);
+                System.Console.WriteLine("Houve um problema na ligação à base de dados ao tentar inserir");
             }
         }
 
@@ -58,7 +58,7 @@ namespace Bot
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e);
+                System.Console.WriteLine("Houve um problema ao tentar ligar à base de dados para verificar");
             }
             return null;
         }
