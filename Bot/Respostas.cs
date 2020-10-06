@@ -20,7 +20,6 @@ namespace Bot
     {
         private static readonly TelegramBotClient bot = new TelegramBotClient("1346767934:AAGFSN0XKPEN3bd5EY5PgJvh5v9m9NsRU2c");
 
-
         public async void Horas(MessageEventArgs e)
         {
             Get _get = new Get();
@@ -57,9 +56,22 @@ namespace Bot
 
         public async void BemVindo(MessageEventArgs e)
         {
+            int quantidadeUsers = await bot.GetChatMembersCountAsync(e.Message.Chat.Id);
             Message message = await bot.SendTextMessageAsync(
             chatId: e.Message.Chat,
-            text: "Olá " + e.Message.NewChatMembers[0].FirstName + " " + e.Message.NewChatMembers[0].LastName + " sê bem vindo ao grupo!" +Environment.NewLine + "Se precisares da minha ajuda envia !comandos",
+            text: "Olá *" + e.Message.NewChatMembers[0].FirstName + " " + e.Message.NewChatMembers[0].LastName + "* sê bem vindo(a) ao "+e.Message.Chat.Title  + Environment.NewLine + "Se precisares da minha ajuda envia *!comandos*"
+            +Environment.NewLine + "Atualmente somos *" + quantidadeUsers.ToString() +"* fornecedores de grelo",
+            parseMode: ParseMode.Markdown,
+            disableNotification: true);
+        }
+
+        public async void Convite(MessageEventArgs e)
+        {
+            string chatLink = await bot.ExportChatInviteLinkAsync(e.Message.Chat.Id);
+
+            Message message = await bot.SendTextMessageAsync(
+            chatId: e.Message.Chat,
+            text: "Link para entrar no grupo: " + chatLink,
             parseMode: ParseMode.Markdown,
             disableNotification: true);
         }
@@ -67,7 +79,7 @@ namespace Bot
         public async void Comandos(MessageEventArgs e)
         {
             Message message = await bot.SendTextMessageAsync(
-            chatId: e.Message.From.Id,
+            chatId: e.Message.Chat.Id,
             text: "Olá " + e.Message.From.FirstName + " " + e.Message.From.LastName +", os meus comandos são:"
             + Environment.NewLine +
             "*!admins* - Lista de admins"
@@ -119,7 +131,7 @@ namespace Bot
             {
                 Message message = await bot.SendTextMessageAsync(
                 chatId: e.Message.Chat,
-                text: "Miguel" + Environment.NewLine + "Marco" + Environment.NewLine + "Sílvio" + Environment.NewLine + "2 Sarg 45º" + Environment.NewLine + "Migas" + Environment.NewLine + "Azevedo" + Environment.NewLine + "João Pincel" + Environment.NewLine + "1 Cabo" + Environment.NewLine + "Guerreiro" + Environment.NewLine + "J.Castanheiro" + Environment.NewLine + "Maluma",
+                text: "Miguel" + Environment.NewLine + "Marco" + Environment.NewLine + "Sílvio" + Environment.NewLine + "2 Sarg 45º" + Environment.NewLine + "Migas" + Environment.NewLine + "Azevedo" + Environment.NewLine + "João Pincel" + Environment.NewLine + "Guerreiro" + Environment.NewLine + "J.Castanheiro" + Environment.NewLine + "Maluma" + Environment.NewLine + "Hello Kitty",
                 parseMode: ParseMode.Markdown,
                 disableNotification: true,
                 replyToMessageId: e.Message.MessageId);

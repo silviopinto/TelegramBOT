@@ -154,6 +154,11 @@ namespace Bot
                 }
             }
 
+            if (globalIdLocal == "")
+            {
+                //Por defeito assume Lisboa
+                globalIdLocal = "1110600";
+            }
 
             using (var w = new WebClient())
             {
@@ -163,15 +168,6 @@ namespace Bot
                 {
                     System.Console.WriteLine("A obter: http://api.ipma.pt/open-data/forecast/meteorology/cities/daily/" + globalIdLocal + ".json");
                     json_data = w.DownloadString("http://api.ipma.pt/open-data/forecast/meteorology/cities/daily/" + globalIdLocal + ".json");
-
-                }
-                catch (Exception)
-                {
-                    System.Console.WriteLine("Ocorreu um erro a tentar obter o JSON do IPMA");
-                }
-
-                try
-                {
                     var result = JsonConvert.DeserializeObject<RootObject2>(json_data);
 
                     var precipitaProb = result.Data.Select(p => p.precipitaProb).ToList();
@@ -225,10 +221,11 @@ namespace Bot
                     {
                         _objectoTemperaturas[element.i].latitude = element.value;
                     }
+
                 }
-                catch (NullReferenceException)
+                catch (Exception)
                 {
-                    System.Console.WriteLine("Ocorreu um erro a carregar o JSON");
+                    System.Console.WriteLine("Ocorreu um erro a tentar obter o JSON do IPMA");
                 }
             }
 

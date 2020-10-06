@@ -54,7 +54,7 @@ namespace Bot
                 PrepararSaidaMembro(e);
             else if (e.Message.Type == Telegram.Bot.Types.Enums.MessageType.Photo)
                 PrepararFotos(e);
-            
+           
 
         }
 
@@ -158,26 +158,42 @@ namespace Bot
                     Ipma.DadosTemperatura3Dias[] _temperaturas = new Ipma.DadosTemperatura3Dias[5];
                     Ipma.DadosIdentificador[] _identificador = new Ipma.DadosIdentificador[30];
 
+                    bool vazio = true;
                     string localidade = e.Message.Text.ToLower().Substring(12, e.Message.Text.ToLower().Length - 12);
+
                     localidade = localidade.Replace(" ", "");
+                    if (localidade == "")
+                        vazio = true;
+                    else
+                        vazio = false;
+
+                    if (vazio == false)
+                    {
+
                     string resposta = "";
 
                     _identificador = _ipma.GetDistritos();
 
                     _temperaturas = _ipma.GetTemperatura(localidade, _identificador);
 
-                    resposta += "<b><i>" + localidade + "</i></b>" + ":" + Environment.NewLine;
+
+                    resposta += "*" + localidade.ToUpper() + "*" + ":" + Environment.NewLine;
 
                     for (int i = 0; i < _temperaturas.Length; i++)
                     {
+
                         resposta += _temperaturas[i].forecastDate + ":" + Environment.NewLine;
-                        resposta += "**Probabilidade de chuva:** " + _temperaturas[i].precipitaProb + "%" + Environment.NewLine;
-                        resposta += "**Max:** " + _temperaturas[i].tMax + "**Min:** " + _temperaturas[i].tMin + Environment.NewLine;
+                        resposta += "*Probabilidade de chuva:* " + _temperaturas[i].precipitaProb + "%" + Environment.NewLine;
+                        resposta += "*Max:* " + _temperaturas[i].tMax + "°C *Min:* " + _temperaturas[i].tMin + "°C" + Environment.NewLine;
+                            resposta += Environment.NewLine;
+                    }
+                        _respostas.Temperatura(e, resposta);
+                    }
                     }
 
-                    _respostas.Temperatura(e, resposta);
-                }
-                catch (Exception)
+
+                
+                catch (System.NullReferenceException)
                 { }
             }
 
@@ -210,7 +226,12 @@ namespace Bot
                 _respostas.Admins(e);
             }
 
-            if (e.Message.Text.ToLower() == "!comandos")
+            if (e.Message.Text.ToLower() == "!convite")
+            {
+                _respostas.Convite(e);
+            }
+
+            if ((e.Message.Text.ToLower() == "!comandos") || (e.Message.Text.ToLower() == "! comandos"))
             {
                 _respostas.Comandos(e);
                 System.Console.WriteLine("O User " + e.Message.From.FirstName + " " + e.Message.From.LastName + " solicitou a lista de comandos.");
@@ -227,6 +248,14 @@ namespace Bot
 
                 _basedados.Inserir("INSERT INTO chat (idUser, conversa, data,user) VALUES ('" + e.Message.Chat.Id.ToString() + "','" + e.Message.Text + "','" + sqlFormattedDate + "','" + e.Message.From + "')");
                 System.Console.WriteLine(sqlFormattedDate + " : " + e.Message.From + " enviou: " + e.Message.Text);
+
+                string data = await _basedados.Verificar("select nome from membros where nome ='" + e.Message.From + "'");
+
+
+                if (data == null)
+                {
+                    _basedados.Inserir("insert into membros (nome, dataEntrada) values ('" + e.Message.From + "','" + sqlFormattedDate + "')");
+                }
 
             }
 
