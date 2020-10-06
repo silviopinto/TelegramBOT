@@ -3,6 +3,7 @@
 # C# Console APP .NET Framework 4.7.2 - MySQL - Telegram
  
  (Em desenvolvimento)
+ última atualização: 06/10/2020
  
  # Bibliotecas:
 - Microsoft.ToolKit
@@ -29,7 +30,9 @@
  - Gerar chaves EuroMilhões
  - Mensagem personalizada de melhor grupo
  - Registo de mensagens enviadas para o grupo (utilizador, data, mensagem)
+ - Registo de entrada dos utilizadores e saída (user, dataEntrada, dataSaida)
  - Numero de mensagens enviadas por um utilizador especifico
+ - Gerar links de convite para entrar no grupo
  
  # Comandos:
  (exemplo de comando Temperatura Lisboa)
